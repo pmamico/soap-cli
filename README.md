@@ -5,7 +5,7 @@
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 
 # soap-cli
-Send SOAP messages from command line like \\
+Send SOAP messages from command line like  
 ```
 $ soap http://soap_url/soap_endpoint request.xml
 ```
