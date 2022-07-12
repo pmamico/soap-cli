@@ -159,7 +159,6 @@ update_xml()
 {
 	if ([ "$xml_update_needed" != "" ])
 	then
-		echo "xmlstarlet edit --update "$_arg_update" --value "$_arg_value"  "$_arg_request" > soap_cli_template.xml"
 		xmlstarlet edit --update "$_arg_update" --value "$_arg_value"  "$_arg_request" > soap_cli_template.xml
 	fi
 }
