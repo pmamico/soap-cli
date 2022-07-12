@@ -152,7 +152,7 @@ soap_call()
 	--request POST \
 	--header "Content-Type: text/xml;charset=UTF-8" \
 	-d @$file \
-	"$_arg_endpoint" | xmllint --format -
+	"$_arg_endpoint" | xmllint --encode UTF8 --format -
 }
 
 update_xml()
