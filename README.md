@@ -6,8 +6,22 @@
 # soap-cli
 Send SOAP messages from command line like \\
 ```
-soap http://example.com/soap_endpoint request.xml
+$ soap http://soap_url/soap_endpoint request.xml
 ```
+output
+```
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:ExampleResponse xmlns:ns2="http://soap_url" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+      <return>
+       	Hello World!
+      </return>
+    </ns2:ExampleResponse>
+  </soap:Body>
+</soap:Envelope>
+```
+
 
 ## How to install
 
