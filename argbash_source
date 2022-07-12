@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# This is a rather minimal example Argbash potential
+# Example taken from http://argbash.readthedocs.io/en/stable/example.html
+#
+# ARG_POSITIONAL_SINGLE([endpoint], [SOAP endpoint url], )
+# ARG_POSITIONAL_SINGLE([request], [SOAP request file], )
+# ARG_OPTIONAL_SINGLE([update], [u], [update the the value by given XPath; valid only with value option])
+# ARG_OPTIONAL_SINGLE([value], [v], [update the the value by given XPath; valid only with update option])
+# ARG_HELP([The general script's help msg])
+# ARGBASH_GO
+
+# [ <-- needed because of Argbash
+
+echo "Value of --option: $_arg_option"
+echo "print is $_arg_print"
+echo "Value of positional-arg: $_arg_positional_arg"
+
+# ] <-- needed because of Argbash
+
