@@ -27,7 +27,7 @@ output
 
 run: 
 ```
-curl -sL https://raw.githubusercontent.com/pmamico/jsoap-cli/main/install.sh | bash
+curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | bash
 ```
 for windows, use `Git Bash` or bash enabled powershell as system administrator.
 
