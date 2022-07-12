@@ -22,7 +22,7 @@ _positionals=()
 
 print_help()
 {
-	printf '%s\n' "The general script's help msg"
+	printf '%s\n' "Send SOAP messages from command line."
 	printf 'Usage: %s [-h|--help] <endpoint> <request>\n' "$0"
 	printf '\t%s\n' "<endpoint>: SOAP endpoint"
 	printf '\t%s\n' "<request>: SOAP request file"
