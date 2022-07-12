@@ -4,8 +4,10 @@
 ![Mac OS](https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0)  
 
 # soap-cli
-Send SOAP messages from command line. \\
-Just a curl wrapper.
+Send SOAP messages from command line like \\
+```
+soap http://example.com/soap_endpoint request.xml
+```
 
 ## How to install
 
@@ -15,11 +17,6 @@ curl -sL https://raw.githubusercontent.com/pmamico/jsoap-cli/main/install.sh | b
 ```
 for windows, use `Git Bash` or bash enabled powershell as system administrator.
 
-## Quick start
-
-```
-soap http://example.com/soap_endpoint request.xml
-```
     
 ## Manual
 ```
