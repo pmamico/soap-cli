@@ -33,7 +33,7 @@ for windows, use `Git Bash` or bash enabled powershell as system administrator.
 ## Manual
 ```
 Send SOAP messages from command line.
-Usage: soap [-u|--update <arg>] [-v|--value <arg>] [-h|--help] <endpoint> <request>
+Usage: soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] 
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
 	-u, --update: update the the value by given XPath; valid only with value option (no default)
