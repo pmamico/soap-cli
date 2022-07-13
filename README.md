@@ -47,6 +47,11 @@ eg.
 ```
 soap <endpoint> <request> -o output.xml --http1.0 --verbose
 ```
+### Change only one value in the request
+You may use your XML as a template and you can change one value before sending the request.
+```
+soap <endpoint> <request> --update <XPath> --value <value>
+```
 
 ## Credits
 
