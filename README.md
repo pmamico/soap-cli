@@ -32,6 +32,7 @@ for windows, use `Git Bash` or bash enabled powershell as system administrator.
     
 ## Manual
 ```
+soap-cli v0.2
 soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
