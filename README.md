@@ -32,16 +32,20 @@ for windows, use `Git Bash` or bash enabled powershell as system administrator.
     
 ## Manual
 ```
-Send SOAP messages from command line.
-Usage: soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] 
+soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
 	-u, --update: update the the value by given XPath; valid only with value option (no default)
 	-v, --value: update the the value by given XPath; valid only with update option (no default)
 	-h, --help: Prints help
+    All additional arguments and options passed to curl. (curl --help all)
 ```
-
-
+### Passing curl options 
+You can pass any standard curl option **after** soap-cli options.  
+eg.
+```
+soap <endpoint> <request> -o output.xml --http1.0 --verbose
+```
 
 ## Credits
 

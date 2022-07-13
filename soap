@@ -9,7 +9,7 @@
 # ARG_HELP([The general script's help msg])
 # ARGBASH_GO
 
-soap_cli_version="v0.1"
+soap_cli_version="v0.2"
 
 die()
 {
@@ -33,19 +33,22 @@ _positionals=()
 _arg_update=
 _arg_value=
 
+_curl_options=
+
 xml_update=
 
 print_help()
 {
 	printf '%s\n' "soap-cli $soap_cli_version" 
 	printf "Send SOAP messages from command line. \n"
-	printf 'Usage: %s <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] [--version] \n' "$0"
+	printf 'Usage: %s <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] [--version] [curl options] \n' "$0"
 	printf '\t%s\n' "<endpoint>: SOAP endpoint url"
 	printf '\t%s\n' "<request>: SOAP request file"
 	printf '\t%s\n' "-u, --update: update the the value by given XPath; valid only with value option (no default)"
 	printf '\t%s\n' "-v, --value: update the the value by given XPath; valid only with update option (no default)"
 	printf '\t%s\n' "-h, --help: Prints help"
 	printf '\t%s\n' "--version: Prints version number"
+	printf '\t%s\n' "All additional arguments and options passed to curl. (curl --help all)"
 }
 
 print_version()
@@ -110,7 +113,7 @@ handle_passed_args_count()
 {
 	local _required_args_string="'endpoint' and 'request'"
 	test "${_positionals_count}" -ge 2 || _PRINT_HELP=yes die "FATAL ERROR: Not enough positional arguments - we require exactly 2 (namely: $_required_args_string), but got only ${_positionals_count}." 1
-	test "${_positionals_count}" -le 2 || _PRINT_HELP=yes die "FATAL ERROR: There were spurious positional arguments --- we expect exactly 2 (namely: $_required_args_string), but got ${_positionals_count} (the last one was: '${_last_positional}')." 1
+	#test "${_positionals_count}" -le 2 || _PRINT_HELP=yes die "FATAL ERROR: There were spurious positional arguments --- we expect exactly 2 (namely: $_required_args_string), but got ${_positionals_count} (the last one was: '${_last_positional}')." 1
 }
 
 
@@ -126,6 +129,14 @@ assign_positional_args()
 		eval "$_positional_name=\${1}" || die "Error during argument parsing, possibly an Argbash bug." 1
 		shift
 	done
+ 
+
+	while [ "${1}" != "" ]; do
+		_curl_options="$_curl_options ${1}"
+		shift
+	done
+	
+	#echo "curl options: $_curl_options"
 }
 
 handle_otpional_args()
@@ -153,12 +164,11 @@ soap_call()
 	then
 		file='soap_cli_template.xml'
 	fi
-
-	curl -s \
+	curl -s $_curl_options \
 	--request POST \
 	--header "Content-Type: text/xml;charset=UTF-8" \
 	-d @$file \
-	"$_arg_endpoint" | xmllint --encode UTF8 --format -
+	"$_arg_endpoint" | xmllint --encode UTF8 --format - 2>/dev/null
 }
 
 update_xml()
