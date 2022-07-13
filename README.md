@@ -11,7 +11,7 @@ $ soap https://eio-soap-sample.herokuapp.com:443/ws sample_request.xml
 ```
 
 
-## demo
+## Demo
 ![demo](soap_cli.gif)
 
 
