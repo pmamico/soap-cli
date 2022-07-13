@@ -23,6 +23,12 @@ curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | 
 ```
 for windows, use `Git Bash` or bash enabled powershell as system administrator.
 
+### Requirements
+
+* `curl` 
+* `xmllint` 
+* `xmlstarlet`
+
     
 ## Manual
 ```
@@ -35,12 +41,9 @@ Usage: soap [-u|--update <arg>] [-v|--value <arg>] [-h|--help] <endpoint> <reque
 	-h, --help: Prints help
 ```
 
-## Requirements
 
-* `curl` 
-* `xmllint` 
-* `xmlstarlet`
 
 ## Credits
 
-Script skeleton generated with https://argbash.io/
+* Script skeleton generated with https://argbash.io/
+* Sample SOAP service used for demostrate: https://github.com/elasticio/soap-sample
