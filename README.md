@@ -7,30 +7,12 @@
 # soap-cli
 Send SOAP messages from command line like  
 ```
-$ soap http://soap_url/soap_endpoint request.xml
-```
-output
-```
-<?xml version="1.0"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <ns2:ExampleResponse xmlns:ns2="http://soap_url" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-      <return>
-       	Hello World!
-      </return>
-    </ns2:ExampleResponse>
-  </soap:Body>
-</soap:Envelope>
+$ soap https://eio-soap-sample.herokuapp.com:443/ws sample_request.xml
 ```
 
-## use xml as a template
-You can update a value in the SOAP XML before sending with a given XPath.  
-example:
-```
-$ soap http://soap_url/soap_endpoint request.xml \
---update //messageId \
---value desiredMessageId
-```
+
+## demo
+![demo](soap_cli.gif)
 
 
 ## How to install
@@ -45,7 +27,7 @@ for windows, use `Git Bash` or bash enabled powershell as system administrator.
 ## Manual
 ```
 Send SOAP messages from command line.
-Usage: ./soap [-u|--update <arg>] [-v|--value <arg>] [-h|--help] <endpoint> <request>
+Usage: soap [-u|--update <arg>] [-v|--value <arg>] [-h|--help] <endpoint> <request>
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
 	-u, --update: update the the value by given XPath; valid only with value option (no default)

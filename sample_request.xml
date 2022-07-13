@@ -1,0 +1,7 @@
+<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'>
+  <soap:Body>
+    <sch:getCountryRequest xmlns:sch='http://spring.io/guides/gs-producing-web-service'>
+      <sch:name>Spain</sch:name>
+    </sch:getCountryRequest>
+  </soap:Body>
+</soap:Envelope>
