@@ -12,6 +12,6 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get install -y libxml2-utils 
       - name: Install xmlstarlet
-        run: sudo apt-get install -y xmlstarlet
+        run: sudo snap install xmlstarlet
       - name: Test
         run: pwd && bash unit_test.sh
