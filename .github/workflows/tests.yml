@@ -8,6 +8,9 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v1
+        
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@master
 
       - name: Test
         run: pwd && bash unit_test.sh
