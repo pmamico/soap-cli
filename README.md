@@ -24,7 +24,7 @@ run:
 ```
 curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | bash
 ```
-for windows, use `Git Bash` or bash enabled powershell as system administrator.
+on Windows, use `Git Bash` or bash enabled `Powershell` **as system administrator**.
 
 ### Requirements
 
@@ -34,17 +34,11 @@ for windows, use `Git Bash` or bash enabled powershell as system administrator.
 
 Install all requirements
 
-
-![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)  
-```sudo apt-get install -y libxml2-utils && sudo snap install xmlstarlet```  
-  
-![Homebrew](https://a11ybadges.com/badge?logo=homebrew)  
-```brew install xmlstarlet``` 
-
-
-<img src="https://user-images.githubusercontent.com/716581/158251522-1534ad0a-741f-497f-bd13-ceed8130679e.png" alt="choco" width="50"/>
-
-```choco install xmlstarlet```
+| OS            | via           | command                                                                          |
+| ------------- |:-------------:| --------------------------------------------------------------------------:      |
+| Ubuntu        | APT           | ```sudo apt-get install libxml2-utils```<br />```sudo snap install xmlstarlet``` |
+| MacOs         | HomeBrew      | ```brew install xmlstarlet```                                                    |
+| Windows       | Chocolatey    | ```choco install xmlstarlet```                                                   |
 
     
 ## Manual
