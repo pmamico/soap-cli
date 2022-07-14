@@ -15,4 +15,4 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Test
-        run: bats -r .
+        run: bats test/soap_cli_test.sh
