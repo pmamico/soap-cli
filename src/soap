@@ -9,7 +9,7 @@
 # ARG_HELP([The general script's help msg])
 # ARGBASH_GO
 
-soap_cli_version="v0.2"
+soap_cli_version="v0.3"
 
 die()
 {
@@ -32,6 +32,7 @@ _positionals=()
 # THE DEFAULTS INITIALIZATION - OPTIONALS
 _arg_update=
 _arg_value=
+_arg_dry=
 
 _curl_options=
 
@@ -41,11 +42,12 @@ print_help()
 {
 	printf '%s\n' "soap-cli $soap_cli_version" 
 	printf "Send SOAP messages from command line. \n"
-	printf 'Usage: %s <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] [--version] [curl options] \n' "$0"
+	printf 'Usage: %s <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options] \n' "$0"
 	printf '\t%s\n' "<endpoint>: SOAP endpoint url"
 	printf '\t%s\n' "<request>: SOAP request file"
 	printf '\t%s\n' "-u, --update: update the the value by given XPath; valid only with value option (no default)"
 	printf '\t%s\n' "-v, --value: update the the value by given XPath; valid only with update option (no default)"
+	printf '\t%s\n' "-d, --dry: dry run, prints the curl command but do not execute"
 	printf '\t%s\n' "-h, --help: Prints help"
 	printf '\t%s\n' "--version: Prints version number"
 	printf '\t%s\n' "All additional arguments and options passed to curl. (curl --help all)"
@@ -85,6 +87,9 @@ parse_commandline()
 				;;
 			-v*)
 				_arg_value="${_key##-v}"
+				;;
+			-d|--dry)
+				_arg_dry="true"
 				;;
 			-h|--help)
 				print_help
@@ -164,11 +169,18 @@ soap_call()
 	then
 		file='soap_cli_template.xml'
 	fi
-	curl -s $_curl_options \
-	--request POST \
-	--header "Content-Type: text/xml;charset=UTF-8" \
-	-d @$file \
-	"$_arg_endpoint" | xmllint --encode UTF8 --format - 2>/dev/null
+
+	curl_command="curl -s $_curl_options --request POST --header 'Content-Type: text/xml;charset=UTF-8' -d @$file $_arg_endpoint"
+
+	if ([ "$_arg_dry" == "true" ])
+	then
+		echo "$curl_command"
+	elif eval $curl_command | xmllint --encode UTF8 --format - 2>/dev/null
+	then
+		return
+	else 
+		eval $curl_command
+	fi
 }
 
 update_xml()

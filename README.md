@@ -11,8 +11,8 @@ $ soap https://eio-soap-sample.herokuapp.com:443/ws sample_request.xml
 ```
 
 
-## Demo
-![demo](soap_cli.gif)
+## Quick Demo
+![demo](.doc/soap_cli.gif)
 
 
 ## How to install
@@ -32,17 +32,18 @@ for windows, use `Git Bash` or bash enabled powershell as system administrator.
     
 ## Manual
 ```
-soap-cli v0.2
-soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-h|--help] [curl options]
+soap-cli v0.3
+soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
 	-u, --update: update the the value by given XPath; valid only with value option (no default)
 	-v, --value: update the the value by given XPath; valid only with update option (no default)
+	-d, --dry: dry run, prints the curl command but do not execute
 	-h, --help: Prints help
     All additional arguments and options passed to curl. (curl --help all)
 ```
 ### Passing curl options 
-You can pass any standard curl option **after** soap-cli options.  
+You can pass any standard curl option **after** `soap-cli` options.  
 eg.
 ```
 soap <endpoint> <request> -o output.xml --http1.0 --verbose
@@ -52,6 +53,19 @@ You may use your XML as a template and you can change one value before sending t
 ```
 soap <endpoint> <request> --update <XPath> --value <value>
 ```
+
+### Dry run
+Print the `curl` command which `soap-cli`  would run under the hood without execution.
+```
+soap <endpoint> <request> --dry
+```
+
+## Unit tests
+You can run the tests yourself via
+```
+./unit_test.sh
+```
+and also get some idea how to use `soap-cli` by reviewing `test/soap_cli_test.sh`.
 
 ## Credits
 
