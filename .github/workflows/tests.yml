@@ -5,12 +5,10 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-
-      - name: Check out code
-        uses: actions/checkout@v1
-        
-      - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Test
         run: pwd && bash unit_test.sh
