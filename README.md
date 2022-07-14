@@ -54,6 +54,15 @@ soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|
 	-h, --help: Prints help
     All additional arguments and options passed to curl. (curl --help all)
 ```
+
+### Updating a value by XPath
+
+It's possible to update a single value by a given XPath before sending the request, like:
+```
+soap <endpoint> <request> --update "//nodeName" --value "newValue"
+```
+Note that this feature is designed to make only a fast change without editing your file, it's not possilbe to stack multiple `--update`.
+
 ### Passing curl options 
 You can pass any standard curl option **after** `soap-cli` options.  
 eg.
