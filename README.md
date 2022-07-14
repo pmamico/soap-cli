@@ -37,8 +37,9 @@ Install all requirements
 | OS            | via           | command                                                                          |
 | ------------- |:-------------:| --------------------------------------------------------------------------:      |
 | Ubuntu        | APT           | ```sudo apt-get install libxml2-utils```<br />```sudo snap install xmlstarlet``` |
-| MacOs         | HomeBrew      | ```brew install xmlstarlet```                                                    |
-| Windows       | Chocolatey    | ```choco install xmlstarlet```                                                   |
+| MacOs         | [HomeBrew](https://brew.sh/)      | ```brew install xmlstarlet```                                                    |
+| Windows       | [Chocolatey](https://chocolatey.org/)    | ```choco install xmlstarlet```                                                   |
+| Windows       | [Cygwin](https://cygwin.com/)<br/>[apt-cyg](https://github.com/transcode-open/apt-cyg) | ```apt-cyg install xmlstarlet```  |
 
     
 ## Manual
