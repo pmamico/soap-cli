@@ -32,6 +32,15 @@ for windows, use `Git Bash` or bash enabled powershell as system administrator.
 * `xmllint` 
 * `xmlstarlet`
 
+Install all requirements
+
+
+![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)  
+```sudo apt-get install -y libxml2-utils xmlstarlet```  
+  
+![Homebrew](https://a11ybadges.com/badge?logo=homebrew)  
+```brew install xmlstarlet``` 
+
     
 ## Manual
 ```
