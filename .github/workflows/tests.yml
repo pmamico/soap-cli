@@ -10,4 +10,4 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Test
-        run: bash unit_test.sh
+        run: pwd && bash unit_test.sh
