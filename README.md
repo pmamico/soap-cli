@@ -41,6 +41,11 @@ Install all requirements
 ![Homebrew](https://a11ybadges.com/badge?logo=homebrew)  
 ```brew install xmlstarlet``` 
 
+
+<img src="https://user-images.githubusercontent.com/716581/158251522-1534ad0a-741f-497f-bd13-ceed8130679e.png" alt="choco" width="50"/>
+
+```choco install xmlstarlet```
+
     
 ## Manual
 ```
