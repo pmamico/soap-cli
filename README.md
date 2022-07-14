@@ -66,3 +66,4 @@ and also get some idea how to use `soap-cli` by reviewing `test/soap_cli_test.sh
 
 * Script skeleton generated with https://argbash.io/
 * Sample SOAP service used for demostrate: https://github.com/elasticio/soap-sample
+* Testing framework: https://github.com/bats-core/bats-core
