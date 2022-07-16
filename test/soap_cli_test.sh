@@ -17,11 +17,11 @@ get_version() {
 }
 
 get_capital_of_spain() {
-    soap $TEST_ENDPOINT $DIR/spain_request.xml | xml sel -t -v "//*[name()='ns2:capital']"
+    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" | xml sel -t -v "//*[name()='ns2:capital']"
 }
 
 update_the_request_and_get_capital_of_poland() {
-    soap $TEST_ENDPOINT $DIR/spain_request.xml --update "//*[name()='sch:name']" --value "Poland" | xml sel -t -v "//*[name()='ns2:capital']"
+    soap  "$TEST_ENDPOINT" "$DIR/spain_request.xml" --update "//*[name()='sch:name']" --value "Poland" | xml sel -t -v "//*[name()='ns2:capital']"
 }
 
 curl_otpion_-o() {
@@ -29,31 +29,31 @@ curl_otpion_-o() {
         echo "$TEMP_OUTPUT already existed before testing."
         return
     fi
-    soap $TEST_ENDPOINT $DIR/spain_request.xml -o $TEMP_OUTPUT
+    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" -o "$TEMP_OUTPUT"
     if test -f "$TEMP_OUTPUT"; then
         echo "$TEMP_OUTPUT successfully created."
     fi
 }
 
 get_capital_from_output_file() {
-    cat $TEMP_OUTPUT | xml sel -t -v "//*[name()='ns2:capital']"
+    xml sel -t -v "//*[name()='ns2:capital']" "$TEMP_OUTPUT"
 }
 
 clean_up_temp_file() {
-    rm $TEMP_OUTPUT 2>/dev/null
+    rm "$TEMP_OUTPUT" 2>/dev/null
 }
 
 curl_otpion_--include() {
-    soap $TEST_ENDPOINT $DIR/spain_request.xml --include
+    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --include
 }
 
 dry_run() {
-    soap $TEST_ENDPOINT $DIR/spain_request.xml --dry
+    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --dry
 }
 
 @test "version check" {
     run get_version
-    assert_output "soap-cli v0.3"
+    assert_output "soap-cli v0.4"
 }
 
 @test "call elasticio's sample SOAP service with 'Spain' as country, expected response is 'Madrid'" {

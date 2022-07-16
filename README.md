@@ -10,9 +10,8 @@
 # soap-cli
 Send SOAP messages from command line like  
 ```
-$ soap https://eio-soap-sample.herokuapp.com:443/ws sample_request.xml
+$ soap <url> <request.xml>
 ```
-
 
 ## Quick Demo
 ![demo](.doc/soap_cli.gif)
@@ -44,7 +43,7 @@ Install all requirements
     
 ## Manual
 ```
-soap-cli v0.3
+soap-cli v0.4
 soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
