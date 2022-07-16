@@ -43,16 +43,21 @@ Install all requirements
     
 ## Manual
 ```
-soap-cli v0.4
-soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
+soap-cli v0.5
+soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
-	-u, --update: update the the value by given XPath; valid only with value option (no default)
-	-v, --value: update the the value by given XPath; valid only with update option (no default)
+	-i, --interactive: use your XML as template, update values interactively before send
+	-u, --update: update the the value by given XPath; valid only with --value option
+	-v, --value: --value: update the the value by given XPath; valid only with --update option
 	-d, --dry: dry run, prints the curl command but do not execute
 	-h, --help: Prints help
     All additional arguments and options passed to curl. (curl --help all)
 ```
+
+### Interactive mode (`--interactive`)
+
+
 
 ### Updating a value by XPath (`--update`)
 
