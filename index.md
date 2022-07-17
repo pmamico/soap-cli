@@ -1,37 +1,79 @@
-## Welcome to GitHub Pages
+# soap-cli
+A minimal SOAP command line client.  
+Soap-cli offers a straightforward API to call your webservices lightning fast and formats the output.
+It also supports interactive mode.  
+```
+$ soap <url> <request.xml>
+```
+![demo](.doc/demo.gif)
+## Features
+### Interactive mode (`--interactive`)
+Change the values in the XML in an interactive way.
+```
+soap <endpoint> <request> --interactive
+```
+This mode waits for user input for all nodes that presents in the given request and do not have any subnodes.
 
-You can use the [editor on GitHub](https://github.com/pmamico/soap-cli/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+### Updating a value by XPath (`--update`)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+It's possible to update a single value by a given XPath before sending the request, like:
+```
+soap <endpoint> <request> --update "//nodeName" --value "newValue"
+```
+Note that this feature is designed to make only a fast change without editing your file, it's not possilbe to stack multiple `--update`.
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+### Passing curl options  
+You can pass any standard curl option **after** `soap-cli` options.  
+eg.
+```
+soap <endpoint> <request> --interactive -o output.xml --http1.0 --verbose
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+### Dry run (`--dry`)
+Print the `curl` command which `soap-cli`  would run under the hood without execution.
+```
+soap <endpoint> <request> --dry
+```
 
-### Jekyll Themes
+    
+## Manual
+```
+soap-cli v0.5
+soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
+	<endpoint>: SOAP endpoint url
+	<request>: SOAP request file
+	-i, --interactive: use your XML as template, update values interactively before send
+	-u, --update: update the the value by given XPath; valid only with --value option
+	-v, --value: --value: update the the value by given XPath; valid only with --update option
+	-d, --dry: dry run, prints the curl command but do not execute
+	-h, --help: Prints help
+    All additional arguments and options passed to curl. (curl --help all)
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/pmamico/soap-cli/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
 
-### Support or Contact
+## How to install
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+run: 
+```
+curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | bash
+```
+on Windows, use `Git Bash` or bash enabled `Powershell` **as system administrator**.
+
+### Requirements
+
+* `curl` 
+* `xmllint` 
+* `xmlstarlet`
+* `GNU grep`
+
+Install all requirements
+
+| OS            | via           | command                                                                          |
+| ------------- |:-------------:| --------------------------------------------------------------------------:      |
+| Ubuntu        | APT           | ```sudo apt-get install libxml2-utils```<br />```sudo snap install xmlstarlet``` |
+| MacOs         | [HomeBrew](https://brew.sh/)      | ```brew install xmlstarlet```<br/>```brew install grep```                                        |
+| Windows       | [Chocolatey](https://chocolatey.org/)    | ```choco install xmlstarlet```                                                   |
+| Windows       | [Cygwin](https://cygwin.com/)<br/>[apt-cyg](https://github.com/transcode-open/apt-cyg) | ```apt-cyg install xmlstarlet```  |
+
+
+
