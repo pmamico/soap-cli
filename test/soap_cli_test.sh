@@ -24,6 +24,14 @@ update_the_request_and_get_capital_of_poland() {
     soap  "$TEST_ENDPOINT" "$DIR/spain_request.xml" --update "//*[name()='sch:name']" --value "Poland" | xml sel -t -v "//*[name()='ns2:capital']"
 }
 
+interactive_mode_get_first_input() {
+    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive
+}
+
+interactive_mode_send_input_Poland() {
+    echo "Poland" | soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive
+}
+
 curl_otpion_-o() {
     if test -f "$TEMP_OUTPUT"; then
         echo "$TEMP_OUTPUT already existed before testing."
@@ -61,7 +69,17 @@ dry_run() {
     assert_output "Madrid"
 }
 
-@test "update the request and send 'Poland' instead of 'Spain' as country, expected response is 'Warsaw'" {
+@test 'update the request with --interactive mode ' {
+    run interactive_mode_get_first_input
+    assert_output --partial "sch:name [Spain]"
+    run interactive_mode_send_input_Poland
+    assert_output --partial "REQUEST"
+    assert_output --partial "<sch:name>Poland</sch:name>"
+    assert_output --partial "RESPONSE"
+    assert_output --partial "<ns2:capital>Warsaw</ns2:capital>"
+}
+
+@test "--update the request with --value 'Poland' instead of 'Spain', expected response is 'Warsaw'" {
     run update_the_request_and_get_capital_of_poland
     assert_output "Warsaw"
 }
@@ -84,4 +102,3 @@ dry_run() {
     run dry_run
     assert_output --partial "curl -s  --request POST"
 }
-
