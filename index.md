@@ -5,7 +5,7 @@ It also supports interactive mode.
 ```
 $ soap <url> <request.xml>
 ```
-![demo](.doc/demo.gif)
+![demo](https://github.com/pmamico/soap-cli/raw/main/.doc/demo.gif)
 ## Features
 ### Interactive mode (`--interactive`)
 Change the values in the XML in an interactive way.
