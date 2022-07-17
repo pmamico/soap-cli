@@ -56,8 +56,11 @@ soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <ar
 ```
 
 ### Interactive mode (`--interactive`)
-
-
+Change the values in the XML in an interactive way.
+```
+soap <endpoint> <request> --interactive
+```
+This mode waits for user input for all nodes that presents in the given request and do not have any subnodes.
 
 ### Updating a value by XPath (`--update`)
 
@@ -71,7 +74,7 @@ Note that this feature is designed to make only a fast change without editing yo
 You can pass any standard curl option **after** `soap-cli` options.  
 eg.
 ```
-soap <endpoint> <request> -o output.xml --http1.0 --verbose
+soap <endpoint> <request> --interactive -o output.xml --http1.0 --verbose
 ```
 
 ### Dry run (`--dry`)
