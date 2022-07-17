@@ -14,7 +14,7 @@ $ soap <url> <request.xml>
 ```
 
 ## Quick Demo
-![demo](.doc/soap_cli.gif)
+![demo](.doc/demo.gif)
 
 
 ## How to install
