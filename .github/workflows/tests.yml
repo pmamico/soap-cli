@@ -16,4 +16,4 @@ jobs:
 #       - name: Install timeout
 #         run: sudo apt-get install timeout
       - name: Test
-        run: timeout 1 && bash unit_test.sh
+        run: timeout 1 bash unit_test.sh
