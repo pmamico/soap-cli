@@ -13,7 +13,5 @@ jobs:
         run: sudo apt-get install -y libxml2-utils 
       - name: Install xmlstarlet
         run: sudo snap install xmlstarlet
-#       - name: Install timeout
-#         run: sudo apt-get install timeout
-      - name: Test
-        run: timeout 1 bash unit_test.sh
+      - name: Run unit test
+        run: bash unit_test.sh 2>&1 
