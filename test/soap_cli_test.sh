@@ -69,9 +69,13 @@ dry_run() {
     assert_output "Madrid"
 }
 
-@test 'update the request with --interactive mode ' {
+@test '--interactive mode sanity check' {
+    skip
     run interactive_mode_get_first_input
     assert_output --partial "sch:name [Spain]"
+}
+
+@test 'update the request with --interactive mode ' {
     run interactive_mode_send_input_Poland
     assert_output --partial "REQUEST"
     assert_output --partial "<sch:name>Poland</sch:name>"
