@@ -1,5 +1,4 @@
 # soap-cli
-A minimal SOAP command line client.  
 soap-cli offers a straightforward API to call your webservices lightning fast and formats the output.  
 It also supports interactive mode.  
 ```
