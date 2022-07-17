@@ -25,7 +25,7 @@ update_the_request_and_get_capital_of_poland() {
 }
 
 interactive_mode_get_first_input() {
-    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive
+    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1
 }
 
 interactive_mode_send_input_Poland() {
