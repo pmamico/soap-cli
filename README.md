@@ -30,13 +30,14 @@ on Windows, use `Git Bash` or bash enabled `Powershell` **as system administrato
 * `curl` 
 * `xmllint` 
 * `xmlstarlet`
+* `GNU grep`
 
 Install all requirements
 
 | OS            | via           | command                                                                          |
 | ------------- |:-------------:| --------------------------------------------------------------------------:      |
 | Ubuntu        | APT           | ```sudo apt-get install libxml2-utils```<br />```sudo snap install xmlstarlet``` |
-| MacOs         | [HomeBrew](https://brew.sh/)      | ```brew install xmlstarlet```                                                    |
+| MacOs         | [HomeBrew](https://brew.sh/)      | ```brew install xmlstarlet```<br/>```brew install grep```                                        |
 | Windows       | [Chocolatey](https://chocolatey.org/)    | ```choco install xmlstarlet```                                                   |
 | Windows       | [Cygwin](https://cygwin.com/)<br/>[apt-cyg](https://github.com/transcode-open/apt-cyg) | ```apt-cyg install xmlstarlet```  |
 
