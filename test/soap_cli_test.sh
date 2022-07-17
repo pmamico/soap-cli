@@ -53,7 +53,7 @@ dry_run() {
 
 @test "version check" {
     run get_version
-    assert_output "soap-cli v0.4"
+    assert_output "soap-cli v0.5"
 }
 
 @test "call elasticio's sample SOAP service with 'Spain' as country, expected response is 'Madrid'" {

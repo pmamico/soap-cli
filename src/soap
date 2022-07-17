@@ -1,16 +1,13 @@
 #!/bin/bash
-#
-# This is the source for argbash generation
-#
-# ARG_POSITIONAL_SINGLE([endpoint], [SOAP endpoint url], )
-# ARG_POSITIONAL_SINGLE([request], [SOAP request file], )
-# ARG_OPTIONAL_SINGLE([update], [u], [update the the value by given XPath; valid only with value option])
-# ARG_OPTIONAL_SINGLE([value], [v], [update the the value by given XPath; valid only with update option])
-# ARG_HELP([The general script's help msg])
-# ARGBASH_GO
+### soap-cli v0.5
+soap_cli_version="v0.5"
+### https://github.com/pmamico/soap-cli
 
-soap_cli_version="v0.4"
+### To keep the script standalone, source is divided into parts
 
+###############################
+### Part: argbash generated ###
+###############################
 die()
 {
 	local _ret="${2:-1}"
@@ -19,7 +16,6 @@ die()
 	exit "${_ret}"
 }
 
-
 begins_with_short_option()
 {
 	local first_option all_short_options='uvh'
@@ -27,22 +23,33 @@ begins_with_short_option()
 	test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
 }
 
-# THE DEFAULTS INITIALIZATION - POSITIONALS
+#################################
+# Part: DEFAULTS INITIALIZATION #
+#################################
+
+#POSITIONALS
 _positionals=()
-# THE DEFAULTS INITIALIZATION - OPTIONALS
+
+#OPTIONALS
 _arg_update=
 _arg_value=
-_arg_dry=
-
+_arg_dry="false"
+_arg_interactive="false"
 _curl_options=
 
+#############################
+# Part: options without arg #
+#############################
+
+### --help, -h
 print_help()
 {
 	printf '%s\n' "soap-cli $soap_cli_version" 
 	printf "Send SOAP messages from command line. \n"
-	printf 'Usage: soap <endpoint> <request> [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options] \n'
+	printf 'Usage: soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options] \n'
 	printf '\t%s\n' "<endpoint>: SOAP endpoint url"
 	printf '\t%s\n' "<request>: SOAP request file"
+	printf '\t%s\n' "-i, --interactive: use your XML as template, update values interactively before send"
 	printf '\t%s\n' "-u, --update: update the the value by given XPath; valid only with --value option"
 	printf '\t%s\n' "-v, --value: update the the value by given XPath; valid only with --update option"
 	printf '\t%s\n' "-d, --dry: dry run, prints the curl command but do not execute"
@@ -69,12 +76,15 @@ check_requirements()
 
 }
 
+### --version, -v
 print_version()
 {
 	printf '%s\n' "soap-cli $soap_cli_version"
 }
 
-
+#############################
+# Part: argbash parsing     #
+#############################
 parse_commandline()
 {
 	_positionals_count=0
@@ -104,6 +114,9 @@ parse_commandline()
 			-v*)
 				_arg_value="${_key##-v}"
 				;;
+      -i|--interactive)
+        _arg_interactive="true"
+        ;;
 			-d|--dry)
 				_arg_dry="true"
 				;;
@@ -129,7 +142,9 @@ parse_commandline()
 	done
 }
 
-
+###################################################
+# Part: handle and assign of args and positionals #
+###################################################
 handle_passed_args_count()
 {
 	local _required_args_string="'endpoint' and 'request'"
@@ -156,7 +171,7 @@ assign_positional_args()
 	#echo "curl options: $_curl_options"
 }
 
-handle_otpional_args()
+handle_optional_args()
 {
   xml_update_needed="false"
 	if [ "$_arg_update" == "" ] && [ "$_arg_value" != "" ]
@@ -175,6 +190,53 @@ handle_otpional_args()
 	fi
 }
 
+#####################################
+# Part: xmlstarlet update if needed #
+#####################################
+update_xml()
+{
+	if [[ "$xml_update_needed" == "true" ]]
+	then
+		xmlstarlet edit --update "$_arg_update" --value "$_arg_value"  "$_arg_request" > soap_cli_template.xml
+	fi
+}
+
+run_interactive_mode_if_enabled(){
+  if [[ "$_arg_interactive" == "true" ]]
+  then
+      interactive_update
+  fi
+}
+
+
+interactive_update(){
+  cp "$_arg_request" soap_cli_template.xml
+  _arg_request="soap_cli_template.xml"
+  namespaces=$(grep -oP "xmlns:.*?=[\"'].*?[\"']" $_arg_request | tr -d "\n")
+  namespaces="${namespaces//xmlns:/ -N }"
+
+  for i in $(xml el "$_arg_request"); do
+      xml_value_find_command="xml sel $namespaces -t --value-of $i $_arg_request  2>&1"
+      ret=$(eval "$xml_value_find_command")
+      count=$(eval "$xml_value_find_command" | wc -l)
+      if [ "$count" -eq 0 ] && [ "$ret" != "" ]
+      then
+         node_shortname=$(echo "$i" | rev | cut -d'/' -f 1 | rev)
+         default_value=$ret
+         read -r -p "$node_shortname [$default_value]: " new_value
+         new_value=${new_value:-$default_value}
+         xml_update_command="xmlstarlet edit --inplace $namespaces --update $i --value $new_value soap_cli_template.xml"
+         eval "$xml_update_command"
+      fi
+  done
+  printf "\n\nREQUEST\n"
+  cat soap_cli_template.xml
+  printf "\n\nRESPONSE\n"
+}
+
+#################################
+# Part: the actual HTTP request #
+#################################
 soap_call()
 {
 	file="$_arg_request"
@@ -196,26 +258,28 @@ soap_call()
 	fi
 }
 
-update_xml()
-{
-	if [[ "$xml_update_needed" == "true" ]]
-	then
-		xmlstarlet edit --update "$_arg_update" --value "$_arg_value"  "$_arg_request" > soap_cli_template.xml
-	fi
-}
 
+##################
+# Part: teardown #
+##################
 clean_up()
 {
-	if [[ "$xml_update_needed" == "true" ]]
+	if [ "$xml_update_needed" == "true" ] || [ "$_arg_interactive" == "true" ]
 	then
 		rm soap_cli_template.xml
 	fi
 }
 
+################################################
+################################################
+############### Part: "Main" ###################
+################################################
+################################################
 parse_commandline "$@"
 handle_passed_args_count
 assign_positional_args 1 "${_positionals[@]}"
-handle_otpional_args
+handle_optional_args
+run_interactive_mode_if_enabled
 update_xml
 soap_call
 clean_up
