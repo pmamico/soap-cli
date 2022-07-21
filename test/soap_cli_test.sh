@@ -28,6 +28,10 @@ interactive_mode_get_first_input() {
     timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1
 }
 
+interactive_mode_with_oneliner_get_first_input() {
+    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1
+}
+
 interactive_mode_send_input_Poland() {
     echo "Poland" | soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive
 }
@@ -70,9 +74,15 @@ dry_run() {
 }
 
 @test '--interactive mode sanity check' {
-    skip
+    #skip
     run interactive_mode_get_first_input
     assert_output --partial "sch:name [Spain]"
+}
+
+@test '--interactive mode with non-formatted request' {
+    #skip
+    run interactive_mode_with_oneliner_get_first_input
+    assert_output --partial "sch:name [Hungary]"
 }
 
 @test 'update the request with --interactive mode ' {
