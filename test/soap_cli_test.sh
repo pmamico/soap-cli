@@ -25,11 +25,11 @@ update_the_request_and_get_capital_of_poland() {
 }
 
 interactive_mode_get_first_input() {
-    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1
+    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1 || code=$?; echo $code; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
 }
 
 interactive_mode_with_oneliner_get_first_input() {
-    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1
+    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1 || code=$?; echo $code; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
 }
 
 interactive_mode_send_input_Poland() {
