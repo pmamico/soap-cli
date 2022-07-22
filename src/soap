@@ -1,6 +1,6 @@
 #!/bin/bash
-### soap-cli v0.5
-soap_cli_version="v0.5"
+### soap-cli v0.6
+soap_cli_version="v0.6"
 ### https://github.com/pmamico/soap-cli
 
 ### To keep the script standalone, source is divided into parts
@@ -210,7 +210,7 @@ run_interactive_mode_if_enabled(){
 
 
 interactive_update(){
-  cp "$_arg_request" soap_cli_template.xml
+  xmllint --encode UTF8 --format "$_arg_request" > soap_cli_template.xml
   _arg_request="soap_cli_template.xml"
   namespaces=$(grep -oP "xmlns:.*?=[\"'].*?[\"']" $_arg_request | tr -d "\n")
   namespaces="${namespaces//xmlns:/ -N }"

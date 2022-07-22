@@ -44,7 +44,7 @@ Install all requirements
     
 ## Manual
 ```
-soap-cli v0.5
+soap-cli v0.6
 soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file

@@ -25,7 +25,11 @@ update_the_request_and_get_capital_of_poland() {
 }
 
 interactive_mode_get_first_input() {
-    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1
+   echo | soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1
+}
+
+interactive_mode_with_oneliner_get_first_input() {
+    echo "Hungary" | soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1
 }
 
 interactive_mode_send_input_Poland() {
@@ -61,7 +65,7 @@ dry_run() {
 
 @test "version check" {
     run get_version
-    assert_output "soap-cli v0.5"
+    assert_output "soap-cli v0.6"
 }
 
 @test "call elasticio's sample SOAP service with 'Spain' as country, expected response is 'Madrid'" {
@@ -70,9 +74,14 @@ dry_run() {
 }
 
 @test '--interactive mode sanity check' {
-    skip
+    #skip
     run interactive_mode_get_first_input
-    assert_output --partial "sch:name [Spain]"
+    assert_output --partial "<sch:name>Spain</sch:name>"
+}
+
+@test '--interactive mode with non-formatted request' {
+    run interactive_mode_with_oneliner_get_first_input
+    assert_output --partial "<sch:name>Hungary</sch:name>"
 }
 
 @test 'update the request with --interactive mode ' {
