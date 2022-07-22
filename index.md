@@ -1,5 +1,5 @@
 # soap-cli
-soap-cli offers a straightforward API to call your webservices lightning fast and formats the output.  
+soap-cli offers a straightforward way to call your webservices lightning fast and formats the output.  
 It also supports interactive mode.  
 ```
 $ soap <url> <request.xml>
@@ -37,7 +37,7 @@ soap <endpoint> <request> --dry
     
 ## Manual
 ```
-soap-cli v0.5
+soap-cli v0.6
 soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
