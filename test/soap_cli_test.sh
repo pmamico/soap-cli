@@ -25,11 +25,11 @@ update_the_request_and_get_capital_of_poland() {
 }
 
 interactive_mode_get_first_input() {
-    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1 || true
+   echo | soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1
 }
 
 interactive_mode_with_oneliner_get_first_input() {
-    timeout 0.1 soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1 || true
+    echo "Hungary" | soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1
 }
 
 interactive_mode_send_input_Poland() {
@@ -76,13 +76,12 @@ dry_run() {
 @test '--interactive mode sanity check' {
     #skip
     run interactive_mode_get_first_input
-    assert_output --partial "sch:name [Spain]"
+    assert_output --partial "<sch:name>Spain</sch:name>"
 }
 
 @test '--interactive mode with non-formatted request' {
-    #skip
     run interactive_mode_with_oneliner_get_first_input
-    assert_output --partial "sch:name [Hungary]"
+    assert_output --partial "<sch:name>Hungary</sch:name>"
 }
 
 @test 'update the request with --interactive mode ' {
