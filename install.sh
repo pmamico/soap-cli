@@ -36,7 +36,7 @@ elif [ "${uname:0:10}" == "MINGW64_NT" ]; then
 fi
 
 if test -f "$INSTALL_PATH"; then
-    echo "$(soap --version) successfully installed. ($INSTALL_PATH)"
+    echo "$(soap --version) was successfully installed. ($INSTALL_PATH)"
 else 
     echo "Failed to install soap-cli"
 fi
