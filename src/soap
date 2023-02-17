@@ -1,6 +1,6 @@
 #!/bin/bash
-### soap-cli v0.6
-soap_cli_version="v0.6"
+### soap-cli v1.0
+soap_cli_version="v1.0"
 ### https://github.com/pmamico/soap-cli
 
 ### To keep the script standalone, source is divided into parts
@@ -208,6 +208,18 @@ run_interactive_mode_if_enabled(){
   fi
 }
 
+get_local_name(){
+  xml_path_w_local_naming="$1"
+  IFS='/' read -ra ADDR <<< "$xml_path_w_local_naming"
+  for node in "${ADDR[@]}"
+  do
+      if [[ "$node" != *"soap:"* ]]; then
+          local_name="*[local-name()='$node']"
+          xml_path_w_local_naming=${xml_path_w_local_naming/$node/$local_name}
+      fi
+  done
+}
+
 
 interactive_update(){
   xmllint --encode UTF8 --format "$_arg_request" > soap_cli_template.xml
@@ -216,7 +228,8 @@ interactive_update(){
   namespaces="${namespaces//xmlns:/ -N }"
 
   for i in $(xml el "$_arg_request"); do
-      xml_value_find_command="xml sel $namespaces -t --value-of $i $_arg_request  2>&1"
+      get_local_name "$i"
+      xml_value_find_command="xml sel \"$namespaces\" -t --value-of \"$xml_path_w_local_naming\" $_arg_request  2>&1"
       ret=$(eval "$xml_value_find_command")
       count=$(eval "$xml_value_find_command" | wc -l)
       if [ "$count" -eq 0 ] && [ "$ret" != "" ]
@@ -225,7 +238,7 @@ interactive_update(){
          default_value=$ret
          read -r -p "$node_shortname [$default_value]: " new_value
          new_value=${new_value:-$default_value}
-         xml_update_command="xmlstarlet edit --inplace $namespaces --update $i --value $new_value soap_cli_template.xml"
+         xml_update_command="xmlstarlet edit --inplace $namespaces --update \"$xml_path_w_local_naming\" --value $new_value soap_cli_template.xml"
          eval "$xml_update_command"
       fi
   done
