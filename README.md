@@ -6,8 +6,7 @@ Send SOAP messages from command line like
 $ soap <url> <request.xml>
 ```
 
-## Quick Demo
-![demo](.doc/demo.gif)
+![demo](.doc/soap-cli.gif)
 
 
 ## How to install
