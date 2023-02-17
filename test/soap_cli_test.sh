@@ -8,7 +8,7 @@ setup() {
     DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
     # make executables in src/ visible to PATH
     PATH="$DIR/../src:$PATH"
-    TEST_ENDPOINT="https://eio-soap-sample.herokuapp.com:443/ws"
+    TEST_ENDPOINT="https://www.dataaccess.com/webservicesserver/NumberConversion.wso"
     TEMP_OUTPUT="temp_out.xml"
 }
 
@@ -16,24 +16,24 @@ get_version() {
     soap --help 2>&1 | grep cli | head -1
 }
 
-get_capital_of_spain() {
-    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" | xml sel -t -v "//*[name()='ns2:capital']"
+get_response_value() {
+    soap "$TEST_ENDPOINT" "$DIR/request.xml" | xml sel -t -v "//*[name()='m:NumberToDollarsResult']"
 }
 
-update_the_request_and_get_capital_of_poland() {
-    soap  "$TEST_ENDPOINT" "$DIR/spain_request.xml" --update "//*[name()='sch:name']" --value "Poland" | xml sel -t -v "//*[name()='ns2:capital']"
+update_the_request_and_get_response_value() {
+    soap  "$TEST_ENDPOINT" "$DIR/request.xml" --update "//*[name()='dNum']" --value "100" | xml sel -t -v "//*[name()='m:NumberToDollarsResult']"
 }
 
 interactive_mode_get_first_input() {
-   echo | soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive 2>&1
+   echo | soap "$TEST_ENDPOINT" "$DIR/request.xml" --interactive 2>&1
 }
 
 interactive_mode_with_oneliner_get_first_input() {
-    echo "Hungary" | soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1
+    echo "100" | soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1
 }
 
-interactive_mode_send_input_Poland() {
-    echo "Poland" | soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --interactive
+interactive_mode_send_input_576() {
+    echo "576" | soap "$TEST_ENDPOINT" "$DIR/request.xml" --interactive
 }
 
 curl_otpion_-o() {
@@ -41,14 +41,14 @@ curl_otpion_-o() {
         echo "$TEMP_OUTPUT already existed before testing."
         return
     fi
-    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" -o "$TEMP_OUTPUT"
+    soap "$TEST_ENDPOINT" "$DIR/request.xml" -o "$TEMP_OUTPUT"
     if test -f "$TEMP_OUTPUT"; then
         echo "$TEMP_OUTPUT successfully created."
     fi
 }
 
-get_capital_from_output_file() {
-    xml sel -t -v "//*[name()='ns2:capital']" "$TEMP_OUTPUT"
+get_response_from_output_file() {
+    xml sel -t -v "//*[name()='m:NumberToDollarsResult']" "$TEMP_OUTPUT"
 }
 
 clean_up_temp_file() {
@@ -56,11 +56,11 @@ clean_up_temp_file() {
 }
 
 curl_otpion_--include() {
-    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --include
+    soap "$TEST_ENDPOINT" "$DIR/request.xml" --include
 }
 
 dry_run() {
-    soap "$TEST_ENDPOINT" "$DIR/spain_request.xml" --dry
+    soap "$TEST_ENDPOINT" "$DIR/request.xml" --dry
 }
 
 @test "version check" {
@@ -68,50 +68,50 @@ dry_run() {
     assert_output "soap-cli v0.6"
 }
 
-@test "call elasticio's sample SOAP service with 'Spain' as country, expected response is 'Madrid'" {
-    run get_capital_of_spain
-    assert_output "Madrid"
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml"' {
+    run get_response_value
+    assert_output "five hundred dollars"
 }
 
-@test '--interactive mode sanity check' {
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --interactive' {
     #skip
     run interactive_mode_get_first_input
-    assert_output --partial "<sch:name>Spain</sch:name>"
+    assert_output --partial "<dNum>500</dNum>"
 }
 
-@test '--interactive mode with non-formatted request' {
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/oneliner_request.xml" --interactive' {
     run interactive_mode_with_oneliner_get_first_input
-    assert_output --partial "<sch:name>Hungary</sch:name>"
+    assert_output --partial "<dNum>500</dNum>"
 }
 
-@test 'update the request with --interactive mode ' {
-    run interactive_mode_send_input_Poland
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --interactive ' {
+    run interactive_mode_send_input_576
     assert_output --partial "REQUEST"
-    assert_output --partial "<sch:name>Poland</sch:name>"
+    assert_output --partial "<dNum>576</dNum>"
     assert_output --partial "RESPONSE"
-    assert_output --partial "<ns2:capital>Warsaw</ns2:capital>"
+    assert_output --partial "<m:NumberToDollarsResult>Warsaw</m:NumberToDollarsResult>"
 }
 
-@test "--update the request with --value 'Poland' instead of 'Spain', expected response is 'Warsaw'" {
-    run update_the_request_and_get_capital_of_poland
-    assert_output "Warsaw"
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --update "//*[name\(\)="dNum"]" --value "100"' {
+    run update_the_request_and_get_response_value
+    assert_output "one hundred dollars"
 }
 
-@test "use some curl options: -o output.xml, expected to send the output to the file" {
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -o "temp_out.xml"' {
     run curl_otpion_-o
     assert_output "$TEMP_OUTPUT successfully created."
-    run get_capital_from_output_file
-    assert_output "Madrid"
+    run get_response_from_output_file
+    assert_output "five hundred dollars"
     clean_up_temp_file
 }
 
 
-@test "use some curl options: --include, expected to include protocol response headers in the output" {
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --include' {
     run curl_otpion_--include
-    assert_output --partial "HTTP/1.1 200"
+    assert_output --partial "HTTP/2 200"
 }
 
-@test "dry run, expected to print the command without execution" {
+@test 'soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --dry' {
     run dry_run
     assert_output --partial "curl -s  --request POST"
 }

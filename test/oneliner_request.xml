@@ -1,1 +1,1 @@
-<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><sch:getCountryRequest xmlns:sch='http://spring.io/guides/gs-producing-web-service'><sch:name>Hungary</sch:name></sch:getCountryRequest></soap:Body></soap:Envelope>
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><NumberToDollars xmlns="http://www.dataaccess.com/webservicesserver/"><dNum>500</dNum></NumberToDollars></soap:Body></soap:Envelope>
