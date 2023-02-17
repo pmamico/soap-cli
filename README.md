@@ -86,7 +86,9 @@ and also get some idea how to use `soap-cli` by reviewing `test/soap_cli_test.sh
 
 ## Credits
 
-* Tried to follow guides from https://clig.dev/
-* Argument and option parsing generated with https://argbash.io/
+* Followed guides from https://clig.dev/
+* SOAP service used for testing: https://documenter.getpostman.com/view/8854915/Szf26WHn
 * Testing framework: https://github.com/bats-core/bats-core
 * Demo recorded with https://asciinema.org/
+* Argument and option parsing generated with https://argbash.io/
+
