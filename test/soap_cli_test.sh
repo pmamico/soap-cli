@@ -64,7 +64,7 @@ dry_run() {
 
 @test "version check" {
     run get_version
-    assert_output "soap-cli v1.1-SNAPSHOT"
+    assert_output "soap-cli v1.1"
 }
 
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml"' {
