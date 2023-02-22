@@ -20,23 +20,6 @@ or
 ```
 curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | bash
 ```
-
-### Requirements
-
-* `curl` 
-* `xmllint` 
-* `xmlstarlet`
-* `GNU grep`
-
-Install all requirements
-
-| OS            | via           | command                                                                          |
-| ------------- |:-------------:| --------------------------------------------------------------------------:      |
-| Ubuntu        | APT           | ```sudo apt-get install libxml2-utils```<br />```sudo snap install xmlstarlet``` |
-| MacOs         | [HomeBrew](https://brew.sh/)      | ```brew install xmlstarlet```<br/>```brew install grep```                                        |
-| Windows       | [Chocolatey](https://chocolatey.org/)    | ```choco install xmlstarlet```                                                   |
-| Windows       | [Cygwin](https://cygwin.com/)<br/>[apt-cyg](https://github.com/transcode-open/apt-cyg) | ```apt-cyg install xmlstarlet```  |
-
     
 ## Manual
 ```
@@ -86,6 +69,13 @@ You can run the tests yourself via
 ./unit_test.sh
 ```
 and also get some idea how to use `soap-cli` by reviewing `test/soap_cli_test.sh`.
+
+### Requirements
+
+* `curl` 
+* `xmllint` 
+* `xmlstarlet`
+* `GNU grep`
 
 ## Credits
 
