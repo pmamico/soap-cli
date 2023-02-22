@@ -11,11 +11,15 @@ $ soap <url> <request.xml>
 
 ## How to install
 
-run: 
+via homebrew:
+```
+brew install pmamico/soap/soap-cli
+```
+
+or
 ```
 curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | bash
 ```
-on Windows, use `Git Bash` or bash enabled `Powershell` **as system administrator**.
 
 ### Requirements
 
