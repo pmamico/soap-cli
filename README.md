@@ -26,7 +26,7 @@ curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | 
 soap-cli v1.2
 Send SOAP messages from command line.
 Usage:
-soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [--upgrade] [curl options]
+soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
 	-i, --interactive: use your XML as template, update values interactively before send
@@ -36,7 +36,6 @@ soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <ar
 	-p, --pretty:  syntax highlighting
 	-h, --help: Prints help
 	--version: Prints version number
-	--upgrade: Get the newest version of soap-cli
 	All additional arguments and options passed to curl. (see 'curl --help all')
 ```
 
