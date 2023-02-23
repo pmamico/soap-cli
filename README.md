@@ -23,16 +23,21 @@ curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | 
     
 ## Manual
 ```
-soap-cli v1.0
-soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options]
+soap-cli v1.2
+Send SOAP messages from command line.
+Usage:
+soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [--upgrade] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
 	-i, --interactive: use your XML as template, update values interactively before send
 	-u, --update: update the the value by given XPath; valid only with --value option
-	-v, --value: --value: update the the value by given XPath; valid only with --update option
+	-v, --value: update the the value by given XPath; valid only with --update option
 	-d, --dry: dry run, prints the curl command but do not execute
+	-p, --pretty:  syntax highlighting
 	-h, --help: Prints help
-    All additional arguments and options passed to curl. (curl --help all)
+	--version: Prints version number
+	--upgrade: Get the newest version of soap-cli
+	All additional arguments and options passed to curl. (see 'curl --help all')
 ```
 
 ### Interactive mode (`--interactive`)

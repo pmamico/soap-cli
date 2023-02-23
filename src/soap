@@ -16,13 +16,6 @@ die()
 	exit "${_ret}"
 }
 
-begins_with_short_option()
-{
-	local first_option all_short_options='uvh'
-	first_option="${1:0:1}"
-	test "$all_short_options" = "${all_short_options/$first_option/}" && return 1 || return 0
-}
-
 #################################
 # Part: DEFAULTS INITIALIZATION #
 #################################
@@ -47,7 +40,8 @@ print_help()
 {
 	printf '%s\n' "soap-cli $soap_cli_version" 
 	printf "Send SOAP messages from command line. \n"
-	printf 'Usage: soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [--version] [curl options] \n'
+	# shellcheck disable=SC2183
+	printf 'Usage: %b\n\033[1msoap <endpoint> <request>\033[0m [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [--upgrade] [curl options] \n'
 	printf '\t%s\n' "<endpoint>: SOAP endpoint url"
 	printf '\t%s\n' "<request>: SOAP request file"
 	printf '\t%s\n' "-i, --interactive: use your XML as template, update values interactively before send"
@@ -57,6 +51,7 @@ print_help()
 	printf '\t%s\n' "-p, --pretty:  syntax highlighting"
 	printf '\t%s\n' "-h, --help: Prints help"
 	printf '\t%s\n' "--version: Prints version number"
+	printf '\t%s\n' "--upgrade: Get the newest version of soap-cli"
 	printf '\t%s\n' "All additional arguments and options passed to curl. (see 'curl --help all')"
 	check_requirements
 }
@@ -75,13 +70,29 @@ check_requirements()
       printf "apt-cyg install xmlstarlet\n"
       exit
   fi
-
+	GREP_VERSION=$(grep --version | head -n 1)
+	if [[ "$GREP_VERSION" != *"GNU"* ]]; then
+		 printf "\nWARNING! GNU grep not found!"
+		 exit
+	fi
 }
 
 ### --version, -v
 print_version()
 {
 	printf '%s\n' "soap-cli $soap_cli_version"
+}
+
+upgrade()
+{
+	printf "\nUpgrading soap-cli..."
+
+	if brew list soap-cli &> /dev/null
+	then
+		brew reinstall pmamico/soap/soap-cli
+	else
+		curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | bash
+	fi
 }
 
 #############################
@@ -131,6 +142,10 @@ parse_commandline()
 				;;
 			--version)
 				print_version
+				exit 0
+				;;
+			--upgrade)
+				upgrade
 				exit 0
 				;;
 			-h*)

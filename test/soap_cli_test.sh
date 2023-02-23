@@ -23,12 +23,21 @@ update_the_request_and_get_response_value() {
     "$DIR"/../src/soap  "$TEST_ENDPOINT" "$DIR/request.xml" --update "//*[name()='dNum']" --value "100" | xml sel -t -v "//*[name()='m:NumberToDollarsResult']"
 }
 
+u_the_request_and_get_response_value() {
+    "$DIR"/../src/soap  "$TEST_ENDPOINT" "$DIR/request.xml" -u "//*[name()='dNum']" -v "123" | xml sel -t -v "//*[name()='m:NumberToDollarsResult']"
+}
+
 interactive_mode_get_first_input() {
    echo | "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" --interactive 2>&1
 }
 
 interactive_mode_with_oneliner_get_first_input() {
     echo "100" | "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" --interactive 2>&1
+}
+
+
+i_mode_with_oneliner_get_first_input() {
+    echo "100" | "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/oneliner_request.xml" -i 2>&1
 }
 
 interactive_mode_send_input_576() {
@@ -62,8 +71,16 @@ dry_run() {
     "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" --dry
 }
 
+d_run() {
+    "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" -d
+}
+
+dp() {
+    "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" -d -p
+}
+
 pretty_print() {
-    "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" --pretty --dry
+    "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" --dry --pretty
 }
 
 @test "version check" {
@@ -87,6 +104,11 @@ pretty_print() {
     assert_output --partial "<dNum>100</dNum>"
 }
 
+@test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/oneliner_request.xml" -i' {
+    run i_mode_with_oneliner_get_first_input
+    assert_output --partial "<dNum>100</dNum>"
+}
+
 @test 'echo "576" | src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --interactive' {
     run interactive_mode_send_input_576
     assert_output --partial "REQUEST"
@@ -100,6 +122,11 @@ pretty_print() {
     assert_output "one hundred dollars"
 }
 
+@test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -u "//*[name\(\)="dNum"]" -v "123"' {
+    run u_the_request_and_get_response_value
+    assert_output "one hundred and twenty three dollars"
+}
+
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -o "temp_out.xml"' {
     run curl_otpion_-o
     assert_output "$TEMP_OUTPUT successfully created."
@@ -107,7 +134,6 @@ pretty_print() {
     assert_output "five hundred dollars"
     clean_up_temp_file
 }
-
 
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --include' {
     run curl_otpion_--include
@@ -120,7 +146,17 @@ pretty_print() {
 }
 
 
+@test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -d' {
+    run d_run
+    assert_output --partial "curl -s  --request POST"
+}
+
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --dry --pretty' {
     run pretty_print
+    assert_output --partial "syntax=xml"
+}
+
+@test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -d -p' {
+    run dp
     assert_output --partial "syntax=xml"
 }
