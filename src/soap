@@ -263,7 +263,7 @@ interactive_update(){
       fi
   done
   printf "\n\nREQUEST\n"
-  cat soap_cli_template.xml $HIGHLIGHT
+  cat soap_cli_template.xml "$HIGHLIGHT"
   printf "\n\nRESPONSE\n"
 }
 
