@@ -62,9 +62,13 @@ dry_run() {
     "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" --dry
 }
 
+pretty_print() {
+    "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" --pretty --dry
+}
+
 @test "version check" {
     run get_version
-    assert_output "soap-cli v1.1"
+    assert_output "soap-cli v1.2"
 }
 
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml"' {
@@ -113,4 +117,10 @@ dry_run() {
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --dry' {
     run dry_run
     assert_output --partial "curl -s  --request POST"
+}
+
+
+@test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" --dry --pretty' {
+    run pretty_print
+    assert_output --partial "syntax=xml"
 }

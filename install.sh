@@ -9,6 +9,7 @@ if [ "$(uname)" == "Darwin" ]; then
     then
         brew install xmlstarlet
     fi
+    brew install grep &> /dev/null
 elif [ "${uname:0:5}" == "Linux" ]; then
     # GNU/Linux platform
     sudo curl -o /usr/local/bin/soap -s https://raw.githubusercontent.com/pmamico/soap-cli/main/src/soap && sudo chmod +x /usr/local/bin/soap
@@ -37,6 +38,11 @@ fi
 
 if test -f "$INSTALL_PATH"; then
     echo "$(soap --version) was successfully installed. ($INSTALL_PATH)"
+    if ! command -v highlight &> /dev/null
+    then
+        echo "You can optionally install 'highlight' if you want to use pretty print (--pretty)."
+    fi
 else 
     echo "Failed to install soap-cli"
 fi
+

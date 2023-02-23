@@ -1,6 +1,6 @@
 #!/bin/bash
 ### soap-cli v1.1
-soap_cli_version="v1.1"
+soap_cli_version="v1.2"
 ### https://github.com/pmamico/soap-cli
 
 ### To keep the script standalone, source is divided into parts
@@ -35,6 +35,7 @@ _arg_update=
 _arg_value=
 _arg_dry="false"
 _arg_interactive="false"
+_arg_pretty="false"
 _curl_options=
 
 #############################
@@ -53,6 +54,7 @@ print_help()
 	printf '\t%s\n' "-u, --update: update the the value by given XPath; valid only with --value option"
 	printf '\t%s\n' "-v, --value: update the the value by given XPath; valid only with --update option"
 	printf '\t%s\n' "-d, --dry: dry run, prints the curl command but do not execute"
+	printf '\t%s\n' "-p, --pretty:  syntax highlighting"
 	printf '\t%s\n' "-h, --help: Prints help"
 	printf '\t%s\n' "--version: Prints version number"
 	printf '\t%s\n' "All additional arguments and options passed to curl. (see 'curl --help all')"
@@ -116,6 +118,9 @@ parse_commandline()
 				;;
       -i|--interactive)
         _arg_interactive="true"
+        ;;
+      -p|--pretty)
+        _arg_pretty="true"
         ;;
 			-d|--dry)
 				_arg_dry="true"
@@ -243,7 +248,7 @@ interactive_update(){
       fi
   done
   printf "\n\nREQUEST\n"
-  cat soap_cli_template.xml
+  cat soap_cli_template.xml $HIGHLIGHT
   printf "\n\nRESPONSE\n"
 }
 
@@ -262,13 +267,22 @@ soap_call()
 
 	if [ "$_arg_dry" == "true" ]
 	then
-		echo "$curl_command"
-	elif eval "$curl_command" | xmllint --encode UTF8 --format - 2>/dev/null
-	then
-		return
+		echo "$curl_command" "$HIGHLIGHT"
 	else 
-		eval "$curl_command"
+		eval "$curl_command" "$HIGHLIGHT"
 	fi
+}
+
+set_highlight()
+{
+  export HIGHLIGHT=""
+  if [  "$_arg_pretty" == "true" ]
+  then
+    if command -v highlight &> /dev/null
+    then
+        HIGHLIGHT="| highlight --out-format=ansi --syntax=xml"
+    fi
+  fi
 }
 
 
@@ -292,6 +306,7 @@ parse_commandline "$@"
 handle_passed_args_count
 assign_positional_args 1 "${_positionals[@]}"
 handle_optional_args
+set_highlight
 run_interactive_mode_if_enabled
 update_xml
 soap_call
