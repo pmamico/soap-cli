@@ -23,20 +23,21 @@ curl -sL 'https://raw.githubusercontent.com/pmamico/soap-cli/main/install.sh' | 
     
 ## Manual
 ```
-soap-cli v1.2
+soap-cli v1.3
 Send SOAP messages from command line.
 Usage:
-soap <endpoint> <request> [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [curl options]
+soap <endpoint> <request> [-i|--interactive] [-U|--update <arg>] [-V|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [curl options]
 	<endpoint>: SOAP endpoint url
 	<request>: SOAP request file
 	-i, --interactive: use your XML as template, update values interactively before send
-	-u, --update: update the the value by given XPath; valid only with --value option
-	-v, --value: update the the value by given XPath; valid only with --update option
+	-U, --update: update the the value by given XPath; valid only with --value option
+	-V, --value: update the the value by given XPath; valid only with --update option
 	-d, --dry: dry run, prints the curl command but do not execute
 	-p, --pretty:  syntax highlighting
 	-h, --help: Prints help
 	--version: Prints version number
 	All additional arguments and options passed to curl. (see 'curl --help all')
+	(except -U as proxy user, use --proxy-user instead)
 ```
 
 ### Interactive mode (`--interactive`)
@@ -58,7 +59,7 @@ Note that this feature is designed to make only a fast change without editing yo
 You can pass any standard curl option **after** `soap-cli` options.  
 eg.
 ```
-soap <endpoint> <request> --interactive -o output.xml --http1.0 --verbose
+soap <endpoint> <request> --interactive -o output.xml --http1.0 -v
 ```
 
 ### Dry run (`--dry`)
