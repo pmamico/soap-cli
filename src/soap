@@ -1,6 +1,6 @@
 #!/bin/bash
-### soap-cli v1.1
-soap_cli_version="v1.2"
+### soap-cli v1.3
+soap_cli_version="v1.3"
 ### https://github.com/pmamico/soap-cli
 
 ### To keep the script standalone, source is divided into parts
@@ -41,17 +41,18 @@ print_help()
 	printf '%s\n' "soap-cli $soap_cli_version" 
 	printf "Send SOAP messages from command line. \n"
 	# shellcheck disable=SC2183
-	printf 'Usage: %b\n\033[1msoap <endpoint> <request>\033[0m [-i|--interactive] [-u|--update <arg>] [-v|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [curl options] \n'
+	printf 'Usage: %b\n\033[1msoap <endpoint> <request>\033[0m [-i|--interactive] [-U|--update <arg>] [-V|--value <arg>] [-d|--dry] [-h|--help] [-p|--pretty] [--version] [curl options] \n'
 	printf '\t%s\n' "<endpoint>: SOAP endpoint url"
 	printf '\t%s\n' "<request>: SOAP request file"
 	printf '\t%s\n' "-i, --interactive: use your XML as template, update values interactively before send"
-	printf '\t%s\n' "-u, --update: update the the value by given XPath; valid only with --value option"
-	printf '\t%s\n' "-v, --value: update the the value by given XPath; valid only with --update option"
+	printf '\t%s\n' "-U, --update: update the the value by given XPath; valid only with --value option"
+	printf '\t%s\n' "-V, --value: update the the value by given XPath; valid only with --update option"
 	printf '\t%s\n' "-d, --dry: dry run, prints the curl command but do not execute"
 	printf '\t%s\n' "-p, --pretty:  syntax highlighting"
 	printf '\t%s\n' "-h, --help: Prints help"
 	printf '\t%s\n' "--version: Prints version number"
 	printf '\t%s\n' "All additional arguments and options passed to curl. (see 'curl --help all')"
+	printf '\t%s\n' "(except -U as proxy user, use --proxy-user instead)"
 	check_requirements
 }
 
@@ -92,7 +93,7 @@ parse_commandline()
 	do
 		_key="$1"
 		case "$_key" in
-			-u|--update)
+			-U|--update)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_update="$2"
 				shift
@@ -100,10 +101,10 @@ parse_commandline()
 			--update=*)
 				_arg_update="${_key##--update=}"
 				;;
-			-u*)
+			-U*)
 				_arg_update="${_key##-u}"
 				;;
-			-v|--value)
+			-V|--value)
 				test $# -lt 2 && die "Missing value for the optional argument '$_key'." 1
 				_arg_value="$2"
 				shift
@@ -111,7 +112,7 @@ parse_commandline()
 			--value=*)
 				_arg_value="${_key##--value=}"
 				;;
-			-v*)
+			-V*)
 				_arg_value="${_key##-v}"
 				;;
       -i|--interactive)
@@ -250,6 +251,18 @@ interactive_update(){
   printf "\n\nRESPONSE\n"
 }
 
+soap_content_type()
+{
+	content_type="application/soap+xml;charset=UTF-8"
+
+	action=$(xmlstarlet sel -N wsa="http://www.w3.org/2005/08/addressing" -t -v "//wsa:Action" "$_arg_request")
+	if [[ "$action" != "" ]]
+	then
+		content_type+=";action=\"$action\""
+	fi
+	echo "$content_type"
+}
+
 #################################
 # Part: the actual HTTP request #
 #################################
@@ -261,7 +274,9 @@ soap_call()
 		file='soap_cli_template.xml'
 	fi
 
-	curl_command="curl -s $_curl_options --request POST --header 'Content-Type: text/xml;charset=UTF-8' -d @$file $_arg_endpoint"
+	content_type=$(soap_content_type)
+
+	curl_command="curl -s $_curl_options --request POST --header 'Content-Type: $content_type' -d @$file $_arg_endpoint"
 
 	if [ "$_arg_dry" == "true" ]
 	then

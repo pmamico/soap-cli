@@ -24,7 +24,7 @@ update_the_request_and_get_response_value() {
 }
 
 u_the_request_and_get_response_value() {
-    "$DIR"/../src/soap  "$TEST_ENDPOINT" "$DIR/request.xml" -u "//*[name()='dNum']" -v "123" | xml sel -t -v "//*[name()='m:NumberToDollarsResult']"
+    "$DIR"/../src/soap  "$TEST_ENDPOINT" "$DIR/request.xml" -U "//*[name()='dNum']" -V "123" | xml sel -t -v "//*[name()='m:NumberToDollarsResult']"
 }
 
 interactive_mode_get_first_input() {
@@ -71,6 +71,10 @@ dry_run() {
     "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" --dry
 }
 
+request_with_action() {
+    "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request_with_action.xml" --dry
+}
+
 d_run() {
     "$DIR"/../src/soap "$TEST_ENDPOINT" "$DIR/request.xml" -d
 }
@@ -85,7 +89,7 @@ pretty_print() {
 
 @test "version check" {
     run get_version
-    assert_output "soap-cli v1.2"
+    assert_output "soap-cli v1.3"
 }
 
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml"' {
@@ -122,7 +126,7 @@ pretty_print() {
     assert_output "one hundred dollars"
 }
 
-@test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -u "//*[name\(\)="dNum"]" -v "123"' {
+@test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -U "//*[name\(\)="dNum"]" -V "123"' {
     run u_the_request_and_get_response_value
     assert_output "one hundred and twenty three dollars"
 }
@@ -159,4 +163,15 @@ pretty_print() {
 @test 'src/soap "https://www.dataaccess.com/webservicesserver/NumberConversion.wso" "test/request.xml" -d -p' {
     run dp
     assert_output --partial "syntax=xml"
+}
+
+@test 'SOAP headers: Content-Type' {
+    run dry_run
+    assert_output --partial "application/soap+xml;charset=UTF-8"
+}
+
+
+@test 'SOAP headers: wsa:Action -> Content-Type: action' {
+    run request_with_action
+    assert_output --partial 'action="https://github.com/pmamico/soap-cli/issues/13"'
 }
